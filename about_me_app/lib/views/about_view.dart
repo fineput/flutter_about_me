@@ -1,36 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../viewmodels/user_viewmodel.dart';
-import '../app/app_routes.dart';
 
 class AboutView extends StatelessWidget {
-  const AboutView({super.key});
+  final String name;
+  final String description;
+
+  const AboutView({
+    super.key,
+    required this.name,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = UserViewModel();
-    final user = viewModel.user;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Детальніше'),
+        title: Text(name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go(AppRoutes.home),
+          onPressed: () => context.pop(),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Хобі: ${user.hobby}', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 16),
-            const Text('Контакти:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            const Text('Email: yaroslav@example.com'),
-            const Text('Telegram: @fineput'),
-          ],
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          description,
+          style: const TextStyle(fontSize: 18),
         ),
       ),
     );
