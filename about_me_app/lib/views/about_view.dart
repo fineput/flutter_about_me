@@ -31,14 +31,14 @@ class AboutView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Твій основний опис
+              
               Text(
                 description,
                 style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(height: 30),
 
-              // Заголовок для GitHub
+              
               const Text(
                 'GitHub статистика',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

@@ -8,4 +8,12 @@ class UserModel {
     required this.description,
     this.githubUsername = '',
   });
+
+  UserModel clone() {
+    return UserModel(
+      name: name,
+      description: description,
+      githubUsername: githubUsername,
+    );
+  }
 }
