@@ -4,6 +4,7 @@ class UserRepository {
   final List<UserModel> _users = [
     UserModel(
       name: 'Ярослав Олефіренко',
+      githubUsername: 'fineput',
       description: 'Tech Support Manager з досвідом роботи з клієнтами, що прагне розвиватися як Team Lead.',
     ),
     UserModel(
