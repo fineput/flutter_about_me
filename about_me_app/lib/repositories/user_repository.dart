@@ -1,26 +1,44 @@
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_model.dart';
 
 class UserRepository {
-  final List<UserModel> _users = [
-    UserModel(
-      name: 'Ярослав Олефіренко',
-      description:
-          'Tech Support Manager з досвідом роботи з клієнтами, що прагне розвиватися як Team Lead.',
-      githubUsername: 'fineput',
-    ),
-    UserModel(
-      name: 'Анна Петрова',
-      description: 'Маркетолог з креативним підходом до створення контенту.',
-    ),
-  ];
+  static const String storageKey = 'saved_users';
+
+  List<UserModel> _users = [];
+
+  UserRepository() {
+    loadUsers();
+  }
+
+  // ---------- LOAD FROM STORAGE ----------
+  Future<void> loadUsers() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString(storageKey);
+
+    if (jsonString == null) return;
+
+    final List decoded = jsonDecode(jsonString);
+    _users = decoded.map((e) => UserModel.fromJson(e)).toList();
+  }
+
+  // ---------- SAVE TO STORAGE ----------
+  Future<void> saveUsers() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonList = _users.map((u) => u.toJson()).toList();
+    await prefs.setString(storageKey, jsonEncode(jsonList));
+  }
 
   List<UserModel> getAll() => _users;
 
-  void add(UserModel user) {
+  // ---------- MODIFY DATA ----------
+  Future<void> add(UserModel user) async {
     _users.add(user);
+    await saveUsers();
   }
 
-  void duplicate(UserModel user) {
+  Future<void> duplicate(UserModel user) async {
     _users.add(user.clone());
+    await saveUsers();
   }
 }

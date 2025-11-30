@@ -7,13 +7,23 @@ class UserViewModel extends ChangeNotifier {
 
   List<UserModel> get users => _repository.getAll();
 
-  void addUser(UserModel user) {
-    _repository.add(user);
+  // Завантаження збережених даних при запуску
+  UserViewModel() {
+    _load();
+  }
+
+  Future<void> _load() async {
+    await _repository.loadUsers();
     notifyListeners();
   }
 
-  void duplicateUser(UserModel user) {
-    _repository.duplicate(user);
+  Future<void> addUser(UserModel user) async {
+    await _repository.add(user);
+    notifyListeners();
+  }
+
+  Future<void> duplicateUser(UserModel user) async {
+    await _repository.duplicate(user);
     notifyListeners();
   }
 }
