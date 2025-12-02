@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../app/app_routes.dart';
 import '../viewmodels/user_viewmodel.dart';
+import '../viewmodels/theme_viewmodel.dart';
 import '../models/user_model.dart';
 
 class HomeView extends StatelessWidget {
@@ -10,12 +11,23 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Отримуємо ViewModel із Provider
     final viewModel = Provider.of<UserViewModel>(context);
+    final themeVM = Provider.of<ThemeViewModel>(context);
     final List<UserModel> users = viewModel.users;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Список резюме')),
+      appBar: AppBar(
+        title: const Text('Список резюме'),
+        actions: [
+          IconButton(
+            icon: Icon(themeVM.isDark ? Icons.dark_mode : Icons.light_mode),
+            onPressed: () {
+              themeVM.toggleTheme();
+            },
+          ),
+        ],
+      ),
+
       body: users.isEmpty
           ? const Center(child: Text('Поки що немає жодного резюме'))
           : ListView.separated(
@@ -28,14 +40,9 @@ class HomeView extends StatelessWidget {
                   title: Text(user.name),
                   subtitle: Text(user.description),
                   onTap: () {
-                    // 👉 Перехід на сторінку перегляду резюме
-                    context.push(
-                      AppRoutes.about,
-                      extra: user,
-                    );
+                    context.push(AppRoutes.about, extra: user);
                   },
                   onLongPress: () {
-                    // ✳️ Дублювання існуючого резюме
                     final duplicated = UserModel(
                       name: '${user.name} (копія)',
                       description: user.description,
@@ -50,11 +57,8 @@ class HomeView extends StatelessWidget {
               },
             ),
 
-      // ➕ Додавання нового резюме
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.push(AppRoutes.form);
-        },
+        onPressed: () => context.push(AppRoutes.form),
         child: const Icon(Icons.add),
       ),
     );
