@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 import '../app/app_routes.dart';
 import '../viewmodels/user_viewmodel.dart';
 import '../viewmodels/theme_viewmodel.dart';
 import '../models/user_model.dart';
+import 'ad_page.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -23,6 +25,19 @@ class HomeView extends StatelessWidget {
             icon: Icon(themeVM.isDark ? Icons.dark_mode : Icons.light_mode),
             onPressed: () {
               themeVM.toggleTheme();
+            },
+          ),
+
+          IconButton(
+            icon: const Icon(Icons.campaign),
+            tooltip: 'Реклама',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AdPage(),
+                ),
+              );
             },
           ),
         ],
@@ -50,7 +65,9 @@ class HomeView extends StatelessWidget {
                     );
                     viewModel.addUser(duplicated);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Резюме "${user.name}" дубльовано')),
+                      SnackBar(
+                        content: Text('Резюме "${user.name}" дубльовано'),
+                      ),
                     );
                   },
                 );

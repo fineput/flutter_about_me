@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart'; 
+
 import 'app/app_routes.dart';
 import 'viewmodels/user_viewmodel.dart';
 import 'viewmodels/github_viewmodel.dart';
 import 'repositories/github_repository.dart';
 import 'services/github_service.dart';
-import 'viewmodels/theme_viewmodel.dart'; // <-- додано
+import 'viewmodels/theme_viewmodel.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await MobileAds.instance.initialize();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserViewModel()),
 
-        // ТЕМИ
         ChangeNotifierProvider(create: (_) => ThemeViewModel()),
 
-        // GitHub services
         Provider(create: (_) => GitHubService()),
         ProxyProvider<GitHubService, GitHubRepository>(
           update: (_, service, __) => GitHubRepository(service),
@@ -41,12 +45,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Resume Builder',
-
-      // ТЕМИ
       theme: ThemeData.light(useMaterial3: true),
       darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: themeVM.isDark ? ThemeMode.dark : ThemeMode.light,
-
       routerConfig: AppRoutes.router,
     );
   }
