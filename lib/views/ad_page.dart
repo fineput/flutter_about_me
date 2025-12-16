@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdPage extends StatefulWidget {
@@ -16,8 +17,10 @@ class _AdPageState extends State<AdPage> {
   void initState() {
     super.initState();
 
+    if (kIsWeb) return; // 🔥 КЛЮЧОВЕ
+
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/2934735716', // ✅ iOS TEST ID
+      adUnitId: 'ca-app-pub-3940256099942544/2934735716',
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
@@ -26,12 +29,9 @@ class _AdPageState extends State<AdPage> {
         },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
-          debugPrint('Ad failed: $error');
         },
       ),
-    );
-
-    _bannerAd!.load();
+    )..load();
   }
 
   @override
@@ -42,6 +42,17 @@ class _AdPageState extends State<AdPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsWeb) {
+      return const Scaffold(
+        body: Center(
+          child: Text(
+            'Реклама недоступна у Web версії',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Реклама')),
       body: Column(

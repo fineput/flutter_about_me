@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'app/app_routes.dart';
 import 'data/database.dart';
@@ -9,31 +9,31 @@ import 'viewmodels/github_viewmodel.dart';
 import 'repositories/github_repository.dart';
 import 'services/github_service.dart';
 import 'viewmodels/theme_viewmodel.dart';
-import 'package:drift/drift.dart';
 
+// 🔽 РЕКЛАМА
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'services/ad_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await MobileAds.instance.initialize();
+
+  if (!kIsWeb) {
+    await MobileAds.instance.initialize();
+  }
+
+  getAdService().init();
 
   final db = AppDatabase();
 
-  // SELECT
   final users = await db.select(db.users).get();
-
   debugPrint('USERS FROM DB: $users');
 
   runApp(
     MultiProvider(
       providers: [
         Provider<AppDatabase>(create: (_) => db),
-
-        ChangeNotifierProvider(
-          create: (_) => UserViewModel(db),
-        ),
-
+        ChangeNotifierProvider(create: (_) => UserViewModel(db)),
         ChangeNotifierProvider(create: (_) => ThemeViewModel()),
-
         Provider(create: (_) => GitHubService()),
         ProxyProvider<GitHubService, GitHubRepository>(
           update: (_, service, __) => GitHubRepository(service),
@@ -65,4 +65,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
