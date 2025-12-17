@@ -56,3 +56,23 @@ class MyAppProviders extends StatelessWidget {
     );
   }
 }
+
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeVM = context.watch<ThemeViewModel>();
+
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'About Me App',
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeVM.isDark ? ThemeMode.dark : ThemeMode.light,
+      routerConfig: AppRoutes.router,
+    );
+  }
+}
+
