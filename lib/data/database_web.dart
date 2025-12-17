@@ -1,8 +1,8 @@
-import 'package:drift/web.dart';
 import 'package:drift/drift.dart';
+import 'package:drift/web.dart';
 
 LazyDatabase openConnection() {
-  return LazyDatabase(() async {
-    return WebDatabase('resume_builder_db');
-  });
+  return LazyDatabase(
+        () async => WebDatabase('app_db'),
+  );
 }

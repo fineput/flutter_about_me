@@ -36,10 +36,14 @@ dependencies:
   url_launcher: ^6.3.0
   shared_preferences: ^2.2.2
   google_mobile_ads: ^5.0.0
+  sqflite_common_ffi_web: ^0.4.5+1
+  sqflite_common_ffi: ^2.3.5
+
+
 
 
   drift: 2.15.0
-  sqlite3: ^2.2.0
+  sqlite3: ^2.3.0
   sqlite3_flutter_libs: ^0.5.21
 
   path_provider: ^2.1.0
